@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using RefactoringKata.Enums;
 using RefactoringKata.Extensions;
 
 namespace RefactoringKata
@@ -36,10 +37,10 @@ namespace RefactoringKata
                     sb.Append(product.Color.ToString().SplitCamelCase().ToLower());
                     sb.Append("\", ");
 
-                    if (product.Size != Product.SIZE_NOT_APPLICABLE)
+                    if (product.Size != ProductSize.SIZE_NOT_APPLICABLE)
                     {
                         sb.Append("\"size\": \"");
-                        sb.Append(getSizeFor(product));
+                        sb.Append(product.Size);
                         sb.Append("\", ");
                     }
 
@@ -66,28 +67,6 @@ namespace RefactoringKata
             }
 
             return sb.Append("]}").ToString();
-        }
-
-
-        private string getSizeFor(Product product)
-        {
-            switch (product.Size)
-            {
-                case 1:
-                    return "XS";
-                case 2:
-                    return "S";
-                case 3:
-                    return "M";
-                case 4:
-                    return "L";
-                case 5:
-                    return "XL";
-                case 6:
-                    return "XXL";
-                default:
-                    return "Invalid Size";
-            }
         }
     }
 }
