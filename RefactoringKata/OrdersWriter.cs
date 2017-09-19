@@ -34,13 +34,13 @@ namespace RefactoringKata
                     sb.Append(product.Code);
                     sb.Append("\", ");
                     sb.Append("\"color\": \"");
-                    sb.Append(product.Color.ToString().SplitCamelCase().ToLower());
+                    sb.Append(product.Color.Display());
                     sb.Append("\", ");
 
                     if (product.Size != ProductSize.SIZE_NOT_APPLICABLE)
                     {
                         sb.Append("\"size\": \"");
-                        sb.Append(product.Size);
+                        sb.Append(product.Size.Display());
                         sb.Append("\", ");
                     }
 

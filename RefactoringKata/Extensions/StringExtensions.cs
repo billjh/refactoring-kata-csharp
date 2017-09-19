@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using RefactoringKata.Enums;
 
 namespace RefactoringKata.Extensions
 {
@@ -15,6 +16,16 @@ namespace RefactoringKata.Extensions
                 @"(\p{Ll})(\P{Ll})",
                 "$1 $2"
             );
+        }
+
+        public static string Display(this ProductSize size)
+        {
+            return size.ToString().SplitCamelCase();
+        }
+
+        public static string Display(this ProductColor color)
+        {
+            return color.ToString().SplitCamelCase().ToLower();
         }
     }
 }
