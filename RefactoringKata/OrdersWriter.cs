@@ -1,5 +1,7 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 using Newtonsoft.Json;
+using RefactoringKata.Extensions;
 using RefactoringKata.Serialization;
 
 namespace RefactoringKata
@@ -8,9 +10,15 @@ namespace RefactoringKata
     {
         private Orders _orders;
 
+        private readonly JsonSerializerSettings _serializationSetting;
+
         public OrdersWriter(Orders orders)
         {
             _orders = orders;
+            _serializationSetting = new JsonSerializerSettings
+            {
+                ContractResolver = new OrdersContractResolver()
+            };
         }
 
         public string GetContents()
@@ -25,22 +33,7 @@ namespace RefactoringKata
                 sb.Append(order.GetOrderId());
                 sb.Append(",");
                 sb.Append("\"products\":[");
-
-                for (var j = 0; j < order.GetProductsCount(); j++)
-                {
-                    var product = order.GetProduct(j);
-                    sb.Append(JsonConvert.SerializeObject(product, new JsonSerializerSettings
-                    {
-                        ContractResolver = new OrdersContractResolver()
-                    }));
-                    sb.Append(", ");
-                }
-
-                if (order.GetProductsCount() > 0)
-                {
-                    sb.Remove(sb.Length - 2, 2);
-                }
-
+                sb.Append(string.Join(",", order.GetProducts().Select(p => JsonConvert.SerializeObject(p, _serializationSetting))));
                 sb.Append("]");
                 sb.Append("},");
             }
