@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using RefactoringKata.Extensions;
 
 namespace RefactoringKata
 {
@@ -32,7 +33,7 @@ namespace RefactoringKata
                     sb.Append(product.Code);
                     sb.Append("\", ");
                     sb.Append("\"color\": \"");
-                    sb.Append(getColorFor(product));
+                    sb.Append(product.Color.ToString().SplitCamelCase().ToLower());
                     sb.Append("\", ");
 
                     if (product.Size != Product.SIZE_NOT_APPLICABLE)
@@ -86,21 +87,6 @@ namespace RefactoringKata
                     return "XXL";
                 default:
                     return "Invalid Size";
-            }
-        }
-
-        private string getColorFor(Product product)
-        {
-            switch (product.Color)
-            {
-                case 1:
-                    return "blue";
-                case 2:
-                    return "red";
-                case 3:
-                    return "yellow";
-                default:
-                    return "no color";
             }
         }
     }
