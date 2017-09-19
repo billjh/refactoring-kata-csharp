@@ -1,6 +1,6 @@
 ﻿using System.Text;
-using RefactoringKata.Enums;
-using RefactoringKata.Extensions;
+using Newtonsoft.Json;
+using RefactoringKata.Serialization;
 
 namespace RefactoringKata
 {
@@ -15,41 +15,25 @@ namespace RefactoringKata
 
         public string GetContents()
         {
-            var sb = new StringBuilder("{\"orders\": [");
+            var sb = new StringBuilder("{\"orders\":[");
 
             for (var i = 0; i < _orders.GetOrdersCount(); i++)
             {
                 var order = _orders.GetOrder(i);
                 sb.Append("{");
-                sb.Append("\"id\": ");
+                sb.Append("\"id\":");
                 sb.Append(order.GetOrderId());
-                sb.Append(", ");
-                sb.Append("\"products\": [");
+                sb.Append(",");
+                sb.Append("\"products\":[");
 
                 for (var j = 0; j < order.GetProductsCount(); j++)
                 {
                     var product = order.GetProduct(j);
-                    sb.Append("{");
-                    sb.Append("\"code\": \"");
-                    sb.Append(product.Code);
-                    sb.Append("\", ");
-                    sb.Append("\"color\": \"");
-                    sb.Append(product.Color.Display());
-                    sb.Append("\", ");
-
-                    if (product.Size != ProductSize.SIZE_NOT_APPLICABLE)
+                    sb.Append(JsonConvert.SerializeObject(product, new JsonSerializerSettings
                     {
-                        sb.Append("\"size\": \"");
-                        sb.Append(product.Size.Display());
-                        sb.Append("\", ");
-                    }
-
-                    sb.Append("\"price\": ");
-                    sb.Append(product.Price);
+                        ContractResolver = new OrdersContractResolver()
+                    }));
                     sb.Append(", ");
-                    sb.Append("\"currency\": \"");
-                    sb.Append(product.Currency);
-                    sb.Append("\"}, ");
                 }
 
                 if (order.GetProductsCount() > 0)
@@ -58,12 +42,12 @@ namespace RefactoringKata
                 }
 
                 sb.Append("]");
-                sb.Append("}, ");
+                sb.Append("},");
             }
 
             if (_orders.GetOrdersCount() > 0)
             {
-                sb.Remove(sb.Length - 2, 2);
+                sb.Remove(sb.Length - 1, 1);
             }
 
             return sb.Append("]}").ToString();
