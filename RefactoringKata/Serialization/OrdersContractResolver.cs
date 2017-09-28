@@ -30,7 +30,7 @@ namespace RefactoringKata.Serialization
         {
             var property = base.CreateProperty(member, memberSerialization);
 
-            if (property.DeclaringType == typeof(Product) && property.PropertyName == "size")
+            if (property.DeclaringType == typeof(Product) && property.PropertyName == nameof(Product.Size).ToLower())
             {
                 property.ShouldSerialize = instance => ((Product) instance).Size != ProductSize.SIZE_NOT_APPLICABLE;
             }
